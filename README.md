@@ -72,7 +72,7 @@ fraud-detection-system/
 ### Option 1: Docker Deployment (Recommended)
 ```bash
 # Clone repository
-git clone https://github.com/sunnynguyen-ai/fraud-detection-system.git
+git clone https://github.com/sarthaktuli7/fraud-detection-system.git
 cd fraud-detection-system
 
 # Start all services
@@ -225,16 +225,12 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open Pull Request
 
-## 📄 **License**
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 👨‍💻 **Author**
 
 **Sarthak Tuli**
 
-- 🔗 **GitHub**:
-- 💼 **LinkedIn**:
+- 🔗 **GitHub**: https://github.com/sarthaktuli7
+- 💼 **LinkedIn**: https://www.linkedin.com/in/sarthak-tuli/
 
 
 ### Technical Expertise
