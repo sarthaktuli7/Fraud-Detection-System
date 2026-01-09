@@ -1,0 +1,17 @@
+{
+  "total_transactions": 100000,
+  "fraud_transactions": "1485",
+  "normal_transactions": "98515",
+  "fraud_rate": 0.01485,
+  "avg_transaction_amount": 36.791376299999996,
+  "median_transaction_amount": 16.89,
+  "max_transaction_amount": 3849.04,
+  "min_transaction_amount": 0.06,
+  "dataset_shape": [
+    100000,
+    27
+  ],
+  "memory_usage_mb": 19.455078125,
+  "avg_normal_amount": 35.09050307059839,
+  "avg_fraud_amount": 149.62742087542088
+}
