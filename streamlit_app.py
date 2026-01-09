@@ -1,5 +1,5 @@
 """
-Fraud Detection Dashboard - Standalone Version for Streamlit Cloud
+Fraud Detection Dashboard - Streamlit Cloud Version
 Author: Sarthak Tuli
 Date: January 2026
 """
@@ -9,11 +9,11 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 from datetime import datetime
 import joblib
 import os
 import time
+from sklearn.preprocessing import StandardScaler
 
 # Page config
 st.set_page_config(
@@ -32,7 +32,93 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Load models
+# ============================================================================
+# REQUIRED CLASSES FOR MODEL LOADING
+# ============================================================================
+
+class SimpleFeatureEngineering:
+    """Feature engineering pipeline - must match training code"""
+    
+    def __init__(self):
+        self.scaler = StandardScaler()
+        self.feature_names = None
+        self.fitted = False
+    
+    def fit(self, df):
+        df_transformed = self._add_features(df.copy())
+        X = df_transformed.drop('Class', axis=1, errors='ignore')
+        self.feature_names = list(X.columns)
+        self.scaler.fit(X)
+        self.fitted = True
+        return self
+    
+    def transform(self, df):
+        df_transformed = self._add_features(df.copy())
+        for col in self.feature_names:
+            if col not in df_transformed.columns:
+                df_transformed[col] = 0
+        X = df_transformed[self.feature_names]
+        X_scaled = self.scaler.transform(X)
+        return pd.DataFrame(X_scaled, columns=self.feature_names)
+    
+    def fit_transform(self, df):
+        self.fit(df)
+        return self.transform(df)
+    
+    def _add_features(self, df):
+        df['Hour'] = (df['Time'] % 86400) / 3600
+        df['Is_Night'] = ((df['Hour'] >= 22) | (df['Hour'] <= 5)).astype(int)
+        df['Amount_Log'] = np.log1p(df['Amount'])
+        df['V1_V3_product'] = df['V1'] * df['V3']
+        df['V4_V12_product'] = df['V4'] * df['V12']
+        v_cols = [f'V{i}' for i in range(1, 21)]
+        existing_v_cols = [c for c in v_cols if c in df.columns]
+        if existing_v_cols:
+            df['V_mean'] = df[existing_v_cols].mean(axis=1)
+            df['V_std'] = df[existing_v_cols].std(axis=1)
+        return df
+
+
+class EnsembleModel:
+    """Ensemble model - must match training code"""
+    
+    def __init__(self, rf_model=None, xgb_model=None, lr_model=None, scaler=None, feature_names=None, weights=None):
+        self.rf_model = rf_model
+        self.xgb_model = xgb_model
+        self.lr_model = lr_model
+        self.scaler = scaler
+        self.feature_names = feature_names
+        self.weights = weights or {'rf': 0.3, 'xgb': 0.5, 'lr': 0.2}
+    
+    def predict_proba(self, X):
+        if isinstance(X, pd.DataFrame):
+            for col in self.feature_names:
+                if col not in X.columns:
+                    X[col] = 0
+            X = X[self.feature_names]
+            X_scaled = self.scaler.transform(X)
+        else:
+            X_scaled = X
+        
+        rf_proba = self.rf_model.predict_proba(X_scaled)[:, 1]
+        xgb_proba = self.xgb_model.predict_proba(X_scaled)[:, 1]
+        lr_proba = self.lr_model.predict_proba(X_scaled)[:, 1]
+        
+        ensemble_proba = (
+            self.weights['rf'] * rf_proba +
+            self.weights['xgb'] * xgb_proba +
+            self.weights['lr'] * lr_proba
+        )
+        return np.column_stack([1 - ensemble_proba, ensemble_proba])
+    
+    def predict(self, X):
+        proba = self.predict_proba(X)[:, 1]
+        return (proba >= 0.5).astype(int)
+
+# ============================================================================
+# LOAD MODELS
+# ============================================================================
+
 @st.cache_resource
 def load_models():
     try:
@@ -41,12 +127,15 @@ def load_models():
         ensemble_model = joblib.load(os.path.join(models_dir, "fraud_detection_ensemble.pkl"))
         return fe_pipeline, ensemble_model, True
     except Exception as e:
-        st.error(f"⚠️ Error loading models: {e}")
+        st.error(f"⚠️ Error loading models: {str(e)}")
         return None, None, False
 
 fe_pipeline, ensemble_model, models_loaded = load_models()
 
-# Helper functions
+# ============================================================================
+# HELPER FUNCTIONS
+# ============================================================================
+
 def get_risk_level(prob):
     if prob >= 0.9: return "CRITICAL", "🔴"
     if prob >= 0.7: return "HIGH", "🟠"
@@ -73,13 +162,11 @@ def generate_transaction(fraud_bias=0.1):
     is_fraud = np.random.random() < fraud_bias
     
     if is_fraud:
-        # Fraud pattern: unusual amounts and feature distributions
         v_features = {f"V{i}": np.random.normal(0, 2.5) for i in range(1, 21)}
-        amount = np.random.lognormal(5, 1.5)  # Larger amounts
+        amount = np.random.lognormal(5, 1.5)
     else:
-        # Normal pattern
         v_features = {f"V{i}": np.random.normal(0, 1) for i in range(1, 21)}
-        amount = np.random.lognormal(3, 1)  # Normal amounts
+        amount = np.random.lognormal(3, 1)
     
     return {
         "Time": np.random.uniform(0, 172800),
@@ -121,7 +208,10 @@ def create_gauge_chart(probability):
     fig.update_layout(height=300, margin=dict(l=20, r=20, t=50, b=20))
     return fig
 
-# Initialize session state
+# ============================================================================
+# INITIALIZE SESSION STATE
+# ============================================================================
+
 if "history" not in st.session_state:
     st.session_state.history = []
 if "counter" not in st.session_state:
@@ -134,10 +224,10 @@ if "total_high_risk" not in st.session_state:
 # ============================================================================
 # SIDEBAR
 # ============================================================================
+
 with st.sidebar:
     st.header("⚙️ Configuration")
     
-    # Model status
     if models_loaded:
         st.success("✅ Models Loaded Successfully")
     else:
@@ -145,24 +235,21 @@ with st.sidebar:
     
     st.divider()
     
-    # Fraud simulation rate slider
     fraud_bias = st.slider(
         "Fraud Simulation Rate",
         min_value=0.0,
         max_value=0.5,
-        value=0.10,
+        value=0.18,
         step=0.01,
         help="Probability of generating fraudulent transactions"
     )
     
-    # Auto-refresh toggle
     auto_refresh = st.checkbox("Auto-refresh Dashboard", value=False)
     if auto_refresh:
         refresh_interval = st.slider("Refresh Interval (seconds)", 1, 30, 5)
     
     st.divider()
     
-    # Model Info
     st.subheader("📊 Model Info")
     st.markdown("""
     - **Algorithm:** Ensemble (RF + XGB + LR)
@@ -174,17 +261,11 @@ with st.sidebar:
     
     st.divider()
     
-    # About
     st.subheader("👨‍💻 About")
-    st.markdown("""
-    **Sarthak Tuli**
+    st.markdown("**Sarthak Tuli**")
+    st.markdown("Syracuse University")
+    st.markdown("Real-time fraud detection using ensemble ML models")
     
-    Built by Sarthak Tuli
-    
-    Real-time fraud detection using ensemble ML models
-    """)
-    
-    # Clear history button
     if st.button("🗑️ Clear History", use_container_width=True):
         st.session_state.history = []
         st.session_state.counter = 1000
@@ -196,7 +277,6 @@ with st.sidebar:
 # MAIN CONTENT
 # ============================================================================
 
-# Header
 st.title("🛡️ Fraud Detection System")
 st.markdown("Real-time ML-powered fraud detection using Ensemble Models")
 st.divider()
@@ -205,61 +285,42 @@ st.divider()
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.metric(
-        label="Total Transactions",
-        value=len(st.session_state.history),
-        delta=None
-    )
+    st.metric("Total Transactions", len(st.session_state.history))
 
 with col2:
-    st.metric(
-        label="Fraud Detected",
-        value=st.session_state.total_fraud,
-        delta=f"{(st.session_state.total_fraud/len(st.session_state.history)*100) if st.session_state.history else 0:.1f}%"
-    )
+    fraud_pct = f"{(st.session_state.total_fraud/len(st.session_state.history)*100) if st.session_state.history else 0:.1f}%"
+    st.metric("Fraud Detected", st.session_state.total_fraud, delta=fraud_pct)
 
 with col3:
-    st.metric(
-        label="High Risk",
-        value=st.session_state.total_high_risk,
-        delta=None
-    )
+    st.metric("High Risk", st.session_state.total_high_risk)
 
 with col4:
     avg_amount = sum(t["Amount"] for t in st.session_state.history) / len(st.session_state.history) if st.session_state.history else 0
-    st.metric(
-        label="Avg Amount",
-        value=f"${avg_amount:,.2f}",
-        delta=None
-    )
+    st.metric("Avg Amount", f"${avg_amount:,.2f}")
 
 st.divider()
 
 # ============================================================================
-# REAL-TIME TRANSACTION MONITORING
+# TRANSACTION MONITORING
 # ============================================================================
 
 st.header("📊 Real-Time Transaction Monitoring")
 
-# Simulate button
 col1, col2 = st.columns([2, 3])
 
 with col1:
     if st.button("🎲 Simulate New Transaction", type="primary", use_container_width=True):
-        # Generate transaction
         transaction = generate_transaction(fraud_bias)
         df = pd.DataFrame([transaction])
         
-        # Get prediction
         start_time = time.time()
         fraud_prob = predict_fraud(df)
-        processing_time = (time.time() - start_time) * 1000  # Convert to ms
+        processing_time = (time.time() - start_time) * 1000
         
         risk_level, emoji = get_risk_level(fraud_prob)
         is_fraud = fraud_prob > 0.5
         is_high_risk = risk_level in ["HIGH", "CRITICAL"]
         
-        # Create record
         record = {
             "transaction_id": f"TXN_{st.session_state.counter}",
             "Amount": transaction["Amount"],
@@ -271,7 +332,6 @@ with col1:
             "timestamp": datetime.now()
         }
         
-        # Update session state
         st.session_state.history.append(record)
         st.session_state.counter += 1
         if is_fraud:
@@ -286,7 +346,7 @@ with col2:
         latest = st.session_state.history[-1]
         st.info(f"**Latest:** {latest['transaction_id']} | ${latest['Amount']:,.2f} | {latest['risk_level']} | {latest['processing_time_ms']:.1f}ms")
 
-# Display latest transaction details
+# Display latest transaction
 if st.session_state.history:
     latest = st.session_state.history[-1]
     
@@ -296,25 +356,20 @@ if st.session_state.history:
     
     with col1:
         st.metric("Transaction ID", latest['transaction_id'])
-    
     with col2:
         st.metric("Amount", f"${latest['Amount']:,.2f}")
-    
     with col3:
         risk_emoji = {"LOW": "🟢", "MEDIUM": "🟡", "HIGH": "🟠", "CRITICAL": "🔴"}
         st.metric("Risk Level", f"{risk_emoji.get(latest['risk_level'], '⚪')} {latest['risk_level']}")
-    
     with col4:
         st.metric("Processing Time", f"{latest['processing_time_ms']:.1f}ms")
     
-    # Gauge chart
     col1, col2 = st.columns([1, 1])
     with col1:
         fig = create_gauge_chart(latest['fraud_probability'])
         st.plotly_chart(fig, use_container_width=True)
     
     with col2:
-        # Transaction details
         st.markdown("### 📋 Transaction Details")
         st.markdown(f"""
         - **Fraud Probability:** {latest['fraud_probability']:.2%}
@@ -333,11 +388,9 @@ if st.session_state.history:
     
     df = pd.DataFrame(st.session_state.history)
     
-    # Charts row 1
     col1, col2 = st.columns(2)
     
     with col1:
-        # Fraud Probability Distribution
         fig = px.histogram(
             df, 
             x="fraud_probability",
@@ -346,18 +399,13 @@ if st.session_state.history:
             labels={"fraud_probability": "Fraud Probability"},
             color_discrete_sequence=["#1f77b4"]
         )
-        fig.update_layout(
-            showlegend=False,
-            xaxis_tickformat=".0%",
-            height=400
-        )
+        fig.update_layout(showlegend=False, height=400)
+        fig.update_xaxes(tickformat=".0%")
         st.plotly_chart(fig, use_container_width=True)
     
     with col2:
-        # Risk Level Distribution
         risk_counts = df["risk_level"].value_counts()
         colors_map = {"LOW": "#28a745", "MEDIUM": "#ffc107", "HIGH": "#fd7e14", "CRITICAL": "#dc3545"}
-        colors = [colors_map.get(level, "#6c757d") for level in risk_counts.index]
         
         fig = px.pie(
             values=risk_counts.values,
@@ -370,14 +418,10 @@ if st.session_state.history:
         fig.update_layout(height=400)
         st.plotly_chart(fig, use_container_width=True)
     
-    # Charts row 2
     col1, col2 = st.columns(2)
     
     with col1:
-        # Transaction Timeline
         df_timeline = df.copy()
-        df_timeline['time_str'] = df_timeline['timestamp'].dt.strftime('%H:%M:%S')
-        
         fig = px.scatter(
             df_timeline,
             x='timestamp',
@@ -390,11 +434,10 @@ if st.session_state.history:
             hover_data=['transaction_id', 'Amount']
         )
         fig.update_layout(height=400)
-        fig.update_yaxis(tickformat=".0%")
+        fig.update_yaxes(tickformat=".0%")
         st.plotly_chart(fig, use_container_width=True)
     
     with col2:
-        # Amount vs Fraud Probability
         fig = px.scatter(
             df,
             x='Amount',
@@ -406,10 +449,9 @@ if st.session_state.history:
             hover_data=['transaction_id']
         )
         fig.update_layout(height=400)
-        fig.update_yaxis(tickformat=".0%")
+        fig.update_yaxes(tickformat=".0%")
         st.plotly_chart(fig, use_container_width=True)
     
-    # Recent Transactions Table
     st.subheader("📋 Recent Transactions")
     
     display_df = df[["transaction_id", "Amount", "fraud_probability", "risk_level", "is_fraud", "processing_time_ms"]].tail(15).copy()
@@ -426,13 +468,8 @@ if st.session_state.history:
         "processing_time_ms": "Processing Time"
     })
     
-    st.dataframe(
-        display_df.iloc[::-1],  # Reverse to show newest first
-        use_container_width=True,
-        hide_index=True
-    )
+    st.dataframe(display_df.iloc[::-1], use_container_width=True, hide_index=True)
     
-    # Summary Statistics
     st.subheader("📊 Summary Statistics")
     col1, col2, col3, col4 = st.columns(4)
     
@@ -448,7 +485,6 @@ if st.session_state.history:
 else:
     st.info("👆 Click 'Simulate New Transaction' to start analyzing transactions!")
 
-# Footer
 st.divider()
 st.markdown("""
 <div style='text-align: center; color: #666;'>
@@ -457,7 +493,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Auto-refresh logic
 if auto_refresh and st.session_state.history:
     time.sleep(refresh_interval)
     st.rerun()
