@@ -1,9 +1,5 @@
 # 🛡️ Real-Time Fraud Detection System
 
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.95+-green.svg)](https://fastapi.tiangolo.com/)
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > **Production-ready fraud detection system using ensemble machine learning models with real-time inference, explainable AI, and comprehensive monitoring.**
 
@@ -235,10 +231,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 **Author**
 
-**Sunny Nguyen**
+**Sarthak Tuli**
 
-- 🔗 **GitHub**: [@sunnynguyen-ai](https://github.com/sunnynguyen-ai)
-- 💼 **LinkedIn**: [Connect with me](https://linkedin.com/in/sunnynguyen-ai)
+- 🔗 **GitHub**:
+- 💼 **LinkedIn**:
 
 
 ### Technical Expertise
