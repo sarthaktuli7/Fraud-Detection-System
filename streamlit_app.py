@@ -1,256 +1,140 @@
-{
- "cells": [
-  {
-   "cell_type": "code",
-   "execution_count": 1,
-   "id": "fe48dc01-30b5-4a54-beef-0caf953283cb",
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stderr",
-     "output_type": "stream",
-     "text": [
-      "2026-01-08 16:34:10.794 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:10.796 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.210 \n",
-      "  \u001b[33m\u001b[1mWarning:\u001b[0m to view this Streamlit app on a browser, run it with the following\n",
-      "  command:\n",
-      "\n",
-      "    streamlit run C:\\Users\\sarthak\\anaconda3\\envs\\fraud_detection\\lib\\site-packages\\ipykernel_launcher.py [ARGUMENTS]\n",
-      "2026-01-08 16:34:11.211 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.211 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.212 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.215 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.216 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.217 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.218 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.219 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.220 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.221 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.223 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.224 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.224 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.226 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.228 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.229 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.230 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.231 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.232 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.233 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.234 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.235 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.235 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.236 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.238 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.240 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.242 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.242 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.244 Session state does not function when running a script without `streamlit run`\n",
-      "2026-01-08 16:34:11.247 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.248 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.251 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.254 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.257 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.259 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.261 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.262 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.263 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.264 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.265 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.266 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.266 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.267 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.268 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.269 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.270 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.272 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.272 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.273 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-08 16:34:11.274 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n"
-     ]
-    },
-    {
-     "data": {
-      "text/plain": [
-       "DeltaGenerator()"
-      ]
-     },
-     "execution_count": 1,
-     "metadata": {},
-     "output_type": "execute_result"
+"""
+Fraud Detection Dashboard - Standalone Version for Streamlit Cloud
+Author: Sarthak Tuli
+"""
+
+import streamlit as st
+import pandas as pd
+import numpy as np
+import plotly.express as px
+import plotly.graph_objects as go
+from datetime import datetime
+import joblib
+import os
+
+# Page config
+st.set_page_config(
+    page_title="Fraud Detection Dashboard",
+    page_icon="🛡️",
+    layout="wide",
+)
+
+# Load models
+@st.cache_resource
+def load_models():
+    try:
+        models_dir = "models"
+        fe_pipeline = joblib.load(os.path.join(models_dir, "feature_engineering_pipeline.pkl"))
+        ensemble_model = joblib.load(os.path.join(models_dir, "fraud_detection_ensemble.pkl"))
+        return fe_pipeline, ensemble_model, True
+    except Exception as e:
+        st.error(f"Error loading models: {e}")
+        return None, None, False
+
+fe_pipeline, ensemble_model, models_loaded = load_models()
+
+# Helper functions
+def get_risk_level(prob):
+    if prob >= 0.9: return "CRITICAL"
+    if prob >= 0.7: return "HIGH"
+    if prob >= 0.3: return "MEDIUM"
+    return "LOW"
+
+def predict_fraud(transaction_df):
+    if not models_loaded:
+        return 0.0
+    transformed = fe_pipeline.transform(transaction_df)
+    prob = ensemble_model.predict_proba(transformed)[0, 1]
+    return float(prob)
+
+def generate_transaction(fraud_bias=0.1):
+    if np.random.random() < fraud_bias:
+        v_features = {f"V{i}": np.random.normal(0, 2) for i in range(1, 21)}
+        amount = np.random.lognormal(4, 1.5)
+    else:
+        v_features = {f"V{i}": np.random.normal(0, 1) for i in range(1, 21)}
+        amount = np.random.lognormal(3, 1)
+    
+    return {
+        "Time": np.random.uniform(0, 172800),
+        "Amount": round(max(0.01, amount), 2),
+        **v_features
     }
-   ],
-   "source": [
-    "\"\"\"\n",
-    "Fraud Detection Dashboard - Standalone Version for Streamlit Cloud\n",
-    "\"\"\"\n",
-    "\n",
-    "import streamlit as st\n",
-    "import pandas as pd\n",
-    "import numpy as np\n",
-    "import plotly.express as px\n",
-    "import plotly.graph_objects as go\n",
-    "from plotly.subplots import make_subplots\n",
-    "from datetime import datetime\n",
-    "import joblib\n",
-    "import os\n",
-    "\n",
-    "# Page config\n",
-    "st.set_page_config(\n",
-    "    page_title=\"Fraud Detection Dashboard\",\n",
-    "    page_icon=\"🛡️\",\n",
-    "    layout=\"wide\",\n",
-    ")\n",
-    "\n",
-    "# Load models\n",
-    "@st.cache_resource\n",
-    "def load_models():\n",
-    "    try:\n",
-    "        models_dir = \"models\"\n",
-    "        fe_pipeline = joblib.load(os.path.join(models_dir, \"feature_engineering_pipeline.pkl\"))\n",
-    "        ensemble_model = joblib.load(os.path.join(models_dir, \"fraud_detection_ensemble.pkl\"))\n",
-    "        return fe_pipeline, ensemble_model, True\n",
-    "    except Exception as e:\n",
-    "        st.error(f\"Error loading models: {e}\")\n",
-    "        return None, None, False\n",
-    "\n",
-    "fe_pipeline, ensemble_model, models_loaded = load_models()\n",
-    "\n",
-    "# Helper functions\n",
-    "def get_risk_level(prob):\n",
-    "    if prob >= 0.9: return \"CRITICAL\"\n",
-    "    if prob >= 0.7: return \"HIGH\"\n",
-    "    if prob >= 0.3: return \"MEDIUM\"\n",
-    "    return \"LOW\"\n",
-    "\n",
-    "def predict_fraud(transaction_df):\n",
-    "    if not models_loaded:\n",
-    "        return 0.0\n",
-    "    transformed = fe_pipeline.transform(transaction_df)\n",
-    "    prob = ensemble_model.predict_proba(transformed)[0, 1]\n",
-    "    return float(prob)\n",
-    "\n",
-    "def generate_transaction(fraud_bias=0.1):\n",
-    "    if np.random.random() < fraud_bias:\n",
-    "        v_features = {f\"V{i}\": np.random.normal(0, 2) for i in range(1, 21)}\n",
-    "        amount = np.random.lognormal(4, 1.5)\n",
-    "    else:\n",
-    "        v_features = {f\"V{i}\": np.random.normal(0, 1) for i in range(1, 21)}\n",
-    "        amount = np.random.lognormal(3, 1)\n",
-    "    \n",
-    "    return {\n",
-    "        \"Time\": np.random.uniform(0, 172800),\n",
-    "        \"Amount\": round(max(0.01, amount), 2),\n",
-    "        **v_features\n",
-    "    }\n",
-    "\n",
-    "# Main UI\n",
-    "st.title(\"🛡️ Fraud Detection Dashboard\")\n",
-    "st.markdown(\"Real-time ML-powered fraud detection system\")\n",
-    "\n",
-    "# Sidebar\n",
-    "st.sidebar.header(\"⚙️ Configuration\")\n",
-    "st.sidebar.success(\"✅ Models Loaded\" if models_loaded else \"❌ Models Not Loaded\")\n",
-    "fraud_bias = st.sidebar.slider(\"Fraud simulation rate\", 0.0, 0.5, 0.1, 0.01)\n",
-    "\n",
-    "# Initialize session state\n",
-    "if \"history\" not in st.session_state:\n",
-    "    st.session_state.history = []\n",
-    "if \"counter\" not in st.session_state:\n",
-    "    st.session_state.counter = 1000\n",
-    "\n",
-    "# Simulate button\n",
-    "st.header(\"📊 Real-Time Transaction Monitoring\")\n",
-    "\n",
-    "if st.button(\"🎲 Simulate New Transaction\", type=\"primary\"):\n",
-    "    transaction = generate_transaction(fraud_bias)\n",
-    "    df = pd.DataFrame([transaction])\n",
-    "    \n",
-    "    fraud_prob = predict_fraud(df)\n",
-    "    risk_level = get_risk_level(fraud_prob)\n",
-    "    \n",
-    "    record = {\n",
-    "        \"transaction_id\": f\"TXN_{st.session_state.counter}\",\n",
-    "        \"Amount\": transaction[\"Amount\"],\n",
-    "        \"fraud_probability\": fraud_prob,\n",
-    "        \"risk_level\": risk_level,\n",
-    "        \"is_fraud\": fraud_prob > 0.5,\n",
-    "        \"timestamp\": datetime.now()\n",
-    "    }\n",
-    "    st.session_state.history.append(record)\n",
-    "    st.session_state.counter += 1\n",
-    "    \n",
-    "    # Display result\n",
-    "    col1, col2, col3 = st.columns(3)\n",
-    "    with col1:\n",
-    "        st.metric(\"Amount\", f\"${transaction['Amount']:,.2f}\")\n",
-    "    with col2:\n",
-    "        st.metric(\"Fraud Probability\", f\"{fraud_prob:.1%}\")\n",
-    "    with col3:\n",
-    "        colors = {\"LOW\": \"🟢\", \"MEDIUM\": \"🟡\", \"HIGH\": \"🟠\", \"CRITICAL\": \"🔴\"}\n",
-    "        st.metric(\"Risk Level\", f\"{colors.get(risk_level, '⚪')} {risk_level}\")\n",
-    "\n",
-    "# History\n",
-    "if st.session_state.history:\n",
-    "    st.header(\"📈 Transaction History\")\n",
-    "    df = pd.DataFrame(st.session_state.history)\n",
-    "    \n",
-    "    col1, col2, col3, col4 = st.columns(4)\n",
-    "    col1.metric(\"Total Transactions\", len(df))\n",
-    "    col2.metric(\"Fraud Detected\", sum(df[\"is_fraud\"]))\n",
-    "    col3.metric(\"Avg Amount\", f\"${df['Amount'].mean():,.2f}\")\n",
-    "    col4.metric(\"High Risk\", sum(df[\"risk_level\"].isin([\"HIGH\", \"CRITICAL\"])))\n",
-    "    \n",
-    "    # Charts\n",
-    "    col1, col2 = st.columns(2)\n",
-    "    with col1:\n",
-    "        fig = px.histogram(df, x=\"fraud_probability\", nbins=20, title=\"Fraud Probability Distribution\")\n",
-    "        st.plotly_chart(fig, use_container_width=True)\n",
-    "    with col2:\n",
-    "        risk_counts = df[\"risk_level\"].value_counts()\n",
-    "        fig = px.pie(values=risk_counts.values, names=risk_counts.index, title=\"Risk Level Distribution\")\n",
-    "        st.plotly_chart(fig, use_container_width=True)\n",
-    "    \n",
-    "    # Table\n",
-    "    st.subheader(\"📋 Recent Transactions\")\n",
-    "    display_df = df[[\"transaction_id\", \"Amount\", \"fraud_probability\", \"risk_level\", \"is_fraud\"]].tail(10)\n",
-    "    display_df[\"Amount\"] = display_df[\"Amount\"].apply(lambda x: f\"${x:,.2f}\")\n",
-    "    display_df[\"fraud_probability\"] = display_df[\"fraud_probability\"].apply(lambda x: f\"{x:.1%}\")\n",
-    "    st.dataframe(display_df, use_container_width=True, hide_index=True)\n",
-    "\n",
-    "# Footer\n",
-    "st.divider()\n",
-    "st.markdown(\"**🛡️ Fraud Detection System** | Built by Sarthak Tuli | Ensemble ML (RF + XGBoost + LR)\")"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "1d612061-aa9e-43ff-a9b4-f4fe2652e244",
-   "metadata": {},
-   "outputs": [],
-   "source": []
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "Python 3 (ipykernel)",
-   "language": "python",
-   "name": "python3"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.9.25"
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 5
-}
+
+# Main UI
+st.title("🛡️ Fraud Detection Dashboard")
+st.markdown("Real-time ML-powered fraud detection system")
+
+# Sidebar
+st.sidebar.header("⚙️ Configuration")
+st.sidebar.success("✅ Models Loaded" if models_loaded else "❌ Models Not Loaded")
+fraud_bias = st.sidebar.slider("Fraud simulation rate", 0.0, 0.5, 0.1, 0.01)
+
+# Initialize session state
+if "history" not in st.session_state:
+    st.session_state.history = []
+if "counter" not in st.session_state:
+    st.session_state.counter = 1000
+
+# Simulate button
+st.header("📊 Real-Time Transaction Monitoring")
+
+if st.button("🎲 Simulate New Transaction", type="primary"):
+    transaction = generate_transaction(fraud_bias)
+    df = pd.DataFrame([transaction])
+    
+    fraud_prob = predict_fraud(df)
+    risk_level = get_risk_level(fraud_prob)
+    
+    record = {
+        "transaction_id": f"TXN_{st.session_state.counter}",
+        "Amount": transaction["Amount"],
+        "fraud_probability": fraud_prob,
+        "risk_level": risk_level,
+        "is_fraud": fraud_prob > 0.5,
+        "timestamp": datetime.now()
+    }
+    st.session_state.history.append(record)
+    st.session_state.counter += 1
+    
+    # Display result
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Amount", f"${transaction['Amount']:,.2f}")
+    with col2:
+        st.metric("Fraud Probability", f"{fraud_prob:.1%}")
+    with col3:
+        colors = {"LOW": "🟢", "MEDIUM": "🟡", "HIGH": "🟠", "CRITICAL": "🔴"}
+        st.metric("Risk Level", f"{colors.get(risk_level, '⚪')} {risk_level}")
+
+# History
+if st.session_state.history:
+    st.header("📈 Transaction History")
+    df = pd.DataFrame(st.session_state.history)
+    
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Total Transactions", len(df))
+    col2.metric("Fraud Detected", sum(df["is_fraud"]))
+    col3.metric("Avg Amount", f"${df['Amount'].mean():,.2f}")
+    col4.metric("High Risk", sum(df["risk_level"].isin(["HIGH", "CRITICAL"])))
+    
+    # Charts
+    col1, col2 = st.columns(2)
+    with col1:
+        fig = px.histogram(df, x="fraud_probability", nbins=20, title="Fraud Probability Distribution")
+        st.plotly_chart(fig, use_container_width=True)
+    with col2:
+        risk_counts = df["risk_level"].value_counts()
+        fig = px.pie(values=risk_counts.values, names=risk_counts.index, title="Risk Level Distribution")
+        st.plotly_chart(fig, use_container_width=True)
+    
+    # Table
+    st.subheader("📋 Recent Transactions")
+    display_df = df[["transaction_id", "Amount", "fraud_probability", "risk_level", "is_fraud"]].tail(10)
+    display_df["Amount"] = display_df["Amount"].apply(lambda x: f"${x:,.2f}")
+    display_df["fraud_probability"] = display_df["fraud_probability"].apply(lambda x: f"{x:.1%}")
+    st.dataframe(display_df, use_container_width=True, hide_index=True)
+
+# Footer
+st.divider()
+st.markdown("**🛡️ Fraud Detection System** | Built by Sarthak Tuli | Syracuse University")
