@@ -239,18 +239,6 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 - **NLP**: Sentiment analysis, text classification, language models
 - **MLOps**: Docker, Kubernetes, CI/CD pipelines, model versioning
 
----
-
-## 🌟 **Star this repository if you found it helpful!**
-
-### Related Projects
-- 🏥 [Medical Image Classifier](https://github.com/sunnynguyen-ai/medical-image-classifier) - Deep learning for pneumonia detection
-- 🏠 [House Price Prediction](https://github.com/sunnynguyen-ai/house-price-prediction) - End-to-end ML project with deployment
-
----
-
-<div align="center">
-
 **⭐ If this project helped you, please consider giving it a star! ⭐**
 
 </div>
